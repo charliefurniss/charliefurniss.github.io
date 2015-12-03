@@ -1,0 +1,106 @@
+/*below is old-fashioned way of doing responsive css...*/
+
+/*div.column {
+
+	width:50%;
+	max-width: 800px;
+	min-width: 500px;
+	height: 500px;
+	background-color: #FF00BF;
+	margin-left: auto;
+	margin-right: auto;
+}*/
+
+/*The below says: in general the width of the div should be 100% of screen, but once screen width reaches 640px apply new css. */
+
+div.column {
+
+	width: 100%;
+	height: 500px;
+	background-color: #FF00BF;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.mobileColumn {
+	
+	width: 100%;
+	height: 500px;
+	background-color: blue;
+	margin-left: auto;
+	margin-right: auto;
+	display: none;
+
+}
+
+
+ul.menu {
+
+	margin: 5px
+	padding: 0px;
+	list-style: none;
+}
+
+ul.menu li {
+
+	/*can't set H and W with inline items*/
+	display: inline-block;
+	margin-right: 10px;
+
+
+}
+
+ul.hamburger {
+
+	display: none;
+
+}
+
+ul.hamburger li {
+
+	display: inline-block;
+
+}
+
+ul.hamburger li img {
+
+	width: 50px;
+	height: 50px;
+
+}
+
+
+
+@media only screen and (max-width: 800px) and (min-width: 600px) {
+
+	div.column {
+
+		display: none;
+
+	}
+
+	div.mobileColumn {
+
+		display: block;
+
+	}
+
+}
+
+
+@media only screen and (max-width: 640px) {
+
+
+	ul.hamburger {
+
+		display: block;
+
+	}
+
+	ul.menu {
+
+		display: none;
+
+	}
+
+}
