@@ -8,11 +8,11 @@ $(document).ready(function() {
 
 	function start(){
 
-		var simonButton;
-		var simonLog = [];
-		var playerClick;
-		var playerClickLog = [];
-		var playerClickNumber = 0;
+		var simonButton;						//computer colour choice
+		var simonLog = [];					//log of computer choices
+		var playerClick;						//player choice
+		var playerClickLog = [];		//log of player choices
+		var playerClickNumber = 0;	//counter for assessEachClick()
 
 		var round = 1;
 
@@ -24,8 +24,8 @@ $(document).ready(function() {
 
 		function intro(){
 
-			$("#board").css("display", "none");
-			$("#infoWindow").slideDown();
+			$("#board").css("display", "none");  //moves board out
+			$("#infoWindow").slideDown();  				//shows infoWindow
 
 			enterPlayerName();	
 
@@ -33,18 +33,23 @@ $(document).ready(function() {
 
 		function enterPlayerName(){
 
-			$("#board").css("display", "none");
+			//$("#board").css("display", "none");
+			
+			//the following show elements for player to enter name
 			$("#infoWindow").slideDown();
 			$("#enterName").slideDown();
 			$("#nameInput").slideDown();
-
 			$("#nameInput").focus();
 
 			$(document).keypress(function(e){
 
+				//accepts players name and stores into playerName
+
 				playerName = $("#nameInput").val().toLowerCase();
 
 				if (e.which == 13) {
+
+					//on "RETURN" clears the infoWindow, disables keypress and calls setUpGame and startGame
 
 					$("#enterName").css("display", "none");
 					$("#nameInput").css("display", "none");
@@ -64,6 +69,7 @@ $(document).ready(function() {
 
 		function setUpGame(){
 
+			//resets variables needed for gameplay
 			simonButton = "";
 			simonLog = [];
 			playerClick = "";
@@ -73,8 +79,10 @@ $(document).ready(function() {
 
 			displayPlayerName(playerName);
 
+			//removes infoWindow
 			$("#infoWindow").css("display", "none");
 			
+			//after delay, shows the game board
 			setTimeout(function(){
 
 				$("#board").css("display", "block");
@@ -83,8 +91,17 @@ $(document).ready(function() {
 
 		}
 
+		function displayPlayerName(name){
+
+			//adds name to h2 tage and the reveals the h2 previsouly hidden h2 tag
+			$("h2").text(name + ": 0");
+			$("h2").slideDown(name + ": 0");
+
+		}
+
 		function startGame() {
 
+			//after delay shows first computer colour flash
 			setTimeout(function(){
 
   			colourGenerator();
@@ -92,24 +109,16 @@ $(document).ready(function() {
 	  	}, 2000);	
 
 		}
-
-		function displayPlayerName(name){
-
-			console.log(name);
-
-			$("h2").text(name + ": 0");
-			$("h2").slideDown(name + ": 0");
-			// $("h2").show("slide", { direction: "left" }, 500);
-
-		}
 		
 		function colourGenerator(){
 
+			//stores listeners on each button into variables
 			var redButton = $(".red");
 			var greenButton = $(".green");
 			var blueButton = $(".blue");
 			var yellowButton = $(".yellow");
 
+			//chooses computer button randomly and assigns it to simonButton
 			var randomNumber = Math.random() * 4;
 
 			if (randomNumber <= 1) {
@@ -130,26 +139,34 @@ $(document).ready(function() {
 
 			}
 
+			//logs computer choice in simonLog array
 			simonLog.push(simonButton.attr('class'));
 
+			//registers computer choice with a flash and a sound
 			simonFlashSound();
 
+			//calls player's turn 
 			pClick();
 
 		};
 
 		function pClick(){
 
+			//sets up listeners on each input element
 			$("input").each(function(){
 
 				$(this).on("click", function(){
 
-					$("input").off("click");
+					//when one of these elements is clicked...
 
+					//...switch off the click listener
+					$("input").off("click");
+					//store the choice of click in playerClick variable
 					playerClick = $(this);
 
+					//register choice with flash and sound
 					playerFlashSound(playerClick.attr('class'));	
-
+					//store player choice in array
 					playerClickLog.push(playerClick.attr('class'));
 
 					assessEachClick();
@@ -160,14 +177,12 @@ $(document).ready(function() {
 
 		};
 
-		//accept player click and log the button pushed
-
 		function assessEachClick() {
 
-				console.log(playerClickLog[playerClickNumber]);
-
-				console.log(simonLog[playerClickNumber]);
-
+				//compares each player click with its respective 
+				//computer click, allowing the player to 
+				//continue if it's correct and stopping the game 
+				//if not
 				if (playerClickLog[playerClickNumber] == simonLog[playerClickNumber]){	
 
 					playerTurn();
@@ -184,6 +199,8 @@ $(document).ready(function() {
 
 		function playerTurn(){
 
+			//triggers the computer's turn once the player has 
+			//made enough clicks
 			if (playerClickLog.length < simonLog.length) {
 
 				playerClickNumber++;
@@ -194,7 +211,7 @@ $(document).ready(function() {
 
 				$("h2").text(playerName + ": " + (round));
 
-				round++;
+				round++;		//increases round for the player's score
 
 				playerClickLog.length = 0;
 
@@ -212,18 +229,21 @@ $(document).ready(function() {
 
 		function simonFlashSound(){		
 
+			//cycles through the computer log to make the 
+			//correct button flash in the sequence
 			for (i = 0; i < simonLog.length; i++) {
 
+				//this function allows the timeout functions to work within the for loop
 				(function(i){
 
 					  setTimeout(function(){
-					           
+					    //flash on       
 				  		$("." + simonLog[i]).css("background-color", $("." + simonLog[i]).attr('id'));
 
 				  		makeSound($("." + simonLog[i]).attr('url'));
 
 				  		setTimeout(function(){
-
+				  			//flash off
 					  		$("." + simonLog[i]).css("background-color", $("." + simonLog[i]).attr('value'));
 
 					  		}, 300);				  			
@@ -234,6 +254,7 @@ $(document).ready(function() {
 
 		function playerFlashSound(buttonClass){
 
+			//flashes and sounds on every player click
 			$("." + buttonClass).css("background-color", $("." + buttonClass).attr('id'));
 
 			makeSound($("." + buttonClass).attr('url'));
@@ -248,6 +269,7 @@ $(document).ready(function() {
 
 		function wrongSound(){
 
+			//plays error sound when player makes a wrong move
 			eSound = soundManager.createSound({
 			        
 			      "url": "audio/errorSound.mp3"
@@ -260,6 +282,7 @@ $(document).ready(function() {
 
 		function makeSound(buttonURL){
 
+			//plays the relevant sound when called either by the player or the computer
 			mySound = soundManager.createSound({
 			        
 			      "url": buttonURL
@@ -272,6 +295,7 @@ $(document).ready(function() {
 
 		function alertError(){
 
+			//resets all variables, makes error sound and replaces board with infoWindow
 			simonButton = "";
 			simonLog = [];
 			playerClick = "";
@@ -289,11 +313,18 @@ $(document).ready(function() {
 
 		function playAgain(){
 
+			//asks player if they want to play again, restarting the game if they say "yes" and resetting the game if they say "no"
 			$("#message").text("whoops!");
 
 			setTimeout(function(){
 
-				$("#message").slideUp();
+				$("#message").slideUp(500, function(){
+
+					$("#message").text("");
+					$("#message").css("display", "block");
+
+				});
+
 				$("#question").text("do you want to play again (y/n)?");
 				$("#question").slideDown();
 
@@ -303,6 +334,7 @@ $(document).ready(function() {
 
 				if (e.which == 89 || e.which == 121) {
 
+					$("#question").text("");
 					setUpGame();
 
 					startGame();
@@ -311,7 +343,7 @@ $(document).ready(function() {
 				
 				else if (e.which == 78 || e.which == 110) {
 
-					$("#question").css("display", "none");
+					$("#question").slideUp()
 
 					setTimeout(function(){
 
