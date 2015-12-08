@@ -254,7 +254,7 @@ $(document).ready(function() {
 
 			    });
 
-			//eSound.play();
+			eSound.play();
 
 		};
 
@@ -266,7 +266,7 @@ $(document).ready(function() {
 
 			    });
 
-			//mySound.play();
+			mySound.play();
 
 		};
 
